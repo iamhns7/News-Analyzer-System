@@ -7,12 +7,12 @@ datasource db {
 }
 
 model Source {
-  id          Int       @id @default(autoincrement())
-  name        String
-  url         String
-  rssUrl      String?
-  trustScore  Int       @default(100)
-  articles    Article[]
+  id         Int       @id @default(autoincrement())
+  name       String
+  url        String
+  rssUrl     String?
+  trustScore Int       @default(100)
+  articles   Article[]
 }
 
 model Article {
@@ -22,15 +22,18 @@ model Article {
   originalContent String
   url             String    @unique
   publishedAt     DateTime
-  source          Source    @relation(fields: [sourceId], references: [id])
+  category        String?
+  sourceName      String?
+  sourceType      String    @default("API")
   analysis        Analysis?
+  source          Source    @relation(fields: [sourceId], references: [id])
 }
 
 model Analysis {
-  id             Int      @id @default(autoincrement())
-  articleId      Int      @unique
+  id             Int     @id @default(autoincrement())
+  articleId      Int     @unique
   aiSummary      String
-  isFake         Boolean  @default(false)
+  isFake         Boolean @default(false)
   fakeNewsReason String?
-  article        Article  @relation(fields: [articleId], references: [id])
+  article        Article @relation(fields: [articleId], references: [id])
 }
