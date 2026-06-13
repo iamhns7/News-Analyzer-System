@@ -22,7 +22,7 @@ export const analyzePendingArticles = async () => {
 
     // Modeli JSON çıktısı verecek şekilde ayarla
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       generationConfig: {
         responseMimeType: 'application/json',
       },
@@ -43,7 +43,7 @@ export const analyzePendingArticles = async () => {
 Haber Başlığı: ${article.title}
 Haber İçeriği: ${article.originalContent}`;
 
-        const result = await model.generateContent(prompt);
+        const result = await model.generateContent(prompt); 
         const responseText = result.response.text();
         const analysisData = JSON.parse(responseText);
 
