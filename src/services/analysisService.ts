@@ -74,8 +74,8 @@ Haber İçeriği: ${article.originalContent}`;
       }
 
       // API Rate Limit önlemi: Döngüdeki her istekten sonra 4 saniye bekle
-      console.log('Rate Limit koruması: 4 saniye bekleniyor...');
-      await new Promise(r => setTimeout(r, 4000));
+      console.log('Rate Limit koruması: 8 saniye bekleniyor...');
+      await new Promise(r => setTimeout(r, 8000));
     }
 
     console.log('Tüm makale analiz işlemleri tamamlandı.');
