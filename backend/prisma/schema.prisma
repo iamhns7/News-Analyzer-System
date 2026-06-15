@@ -21,6 +21,7 @@ model Article {
   title           String
   originalContent String
   url             String    @unique
+  imageUrl        String?
   publishedAt     DateTime
   category        String?
   sourceName      String?

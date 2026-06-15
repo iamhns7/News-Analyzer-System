@@ -67,11 +67,12 @@ class NewsService {
             // Upsert: url eşleşirse güncelle, yoksa oluştur
             const result = await prisma.article.upsert({
                 where: { url: item.url },
-                update: {}, // Zaten varsa hiçbir şeyi değiştirme
+                update: { imageUrl: item.urlToImage || undefined }, // imageUrl'i güncelle
                 create: {
                     title: item.title,
                     originalContent: item.description || item.content || 'İçerik yok',
                     url: item.url,
+                    imageUrl: item.urlToImage || null,
                     publishedAt: new Date(item.publishedAt),
                     sourceId: sourceRecord.id,
                     sourceType: 'API',
@@ -120,11 +121,12 @@ class NewsService {
 
                     await prisma.article.upsert({
                         where: { url: item.link },
-                        update: {}, // Zaten varsa değiştirme
+                        update: { imageUrl: (item as any).enclosure?.url || undefined }, // imageUrl'i güncelle
                         create: {
                             title: item.title,
                             originalContent: item.contentSnippet || item.content || item.summary || 'İçerik yok',
                             url: item.link,
+                            imageUrl: (item as any).enclosure?.url || null,
                             publishedAt: item.pubDate ? new Date(item.pubDate) : new Date(),
                             sourceId: sourceRecord.id,
                             sourceType: 'RSS',
