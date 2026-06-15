@@ -1,12 +1,17 @@
 export interface Article {
   id: number;
   title: string;
-  aiSummary: string;
   originalContent: string;
-  trustScore: number;
-  isFake: boolean;
   imageUrl: string | null;
   url: string;
+  source: {
+    name: string;
+  };
+  analysis: {
+    aiSummary: string;
+    trustScore: number;
+    isFake: boolean;
+  };
 }
 
 export interface Stat {

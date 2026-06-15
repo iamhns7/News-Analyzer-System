@@ -3,6 +3,7 @@ import { StatCard } from '../components/StatCard';
 import { NewsCard } from '../components/NewsCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Article, Stat } from '../types';
+import { fetchArticles } from '../services/api';
 
 const ITEMS_PER_PAGE = 24;
 
@@ -17,30 +18,33 @@ export function Dashboard() {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    const fetchArticles = async () => {
+    const loadArticles = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/articles');
-        if (!response.ok) throw new Error("Veri çekilemedi");
-        const data = await response.json();
+        const data = await fetchArticles();
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const mappedArticles: Article[] = data.map((item: any) => ({
           id: item.id,
           title: item.title,
-          aiSummary: item.analysis?.aiSummary || "Analiz yok",
           originalContent: item.originalContent || "",
-          trustScore: item.source?.trustScore || 0,
-          isFake: item.analysis?.isFake || false,
           imageUrl: item.imageUrl || null,
           url: item.url || "",
+          source: {
+            name: item.source?.name || "Bilinmiyor",
+          },
+          analysis: {
+            aiSummary: item.analysis?.aiSummary || "Analiz yok",
+            trustScore: item.source?.trustScore || 0,
+            isFake: item.analysis?.isFake || false,
+          }
         }));
 
         setArticles(mappedArticles);
 
         const total = mappedArticles.length;
-        const fakeCount = mappedArticles.filter(a => a.isFake).length;
+        const fakeCount = mappedArticles.filter(a => a.analysis.isFake).length;
         const avgTrust = total > 0
-          ? Math.round(mappedArticles.reduce((acc, a) => acc + a.trustScore, 0) / total)
+          ? Math.round(mappedArticles.reduce((acc, a) => acc + a.analysis.trustScore, 0) / total)
           : 0;
 
         setStats([
@@ -55,7 +59,7 @@ export function Dashboard() {
       }
     };
 
-    fetchArticles();
+    loadArticles();
   }, []);
 
   const totalPages = Math.ceil(articles.length / ITEMS_PER_PAGE);
