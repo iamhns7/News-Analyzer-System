@@ -7,37 +7,39 @@ export function NewsCard({ article }: { article: Article }) {
   const isTrusted = article.trustScore >= 50;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-slate-100 flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-teal-200">
-      {article.imageUrl ? (
-        <img
-          src={article.imageUrl}
-          alt={article.title}
-          className="w-full h-44 object-cover"
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.style.display = 'none';
-            (target.nextElementSibling as HTMLElement)?.classList.remove('hidden');
-          }}
-        />
-      ) : null}
-      {/* Placeholder when no image or image fails to load */}
-      <div className={`w-full h-36 bg-gradient-to-br from-teal-50 to-slate-100 flex items-center justify-center ${article.imageUrl ? 'hidden' : ''}`}>
-        <Newspaper size={40} className="text-teal-300" />
+    <div className="group bg-white/90 backdrop-blur-sm cursor-pointer rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex flex-col overflow-hidden transition-all duration-500 ease-out hover:shadow-[0_20px_40px_-12px_rgba(20,184,166,0.15)] hover:-translate-y-1.5 hover:border-teal-200">
+      <div className="w-full h-48 overflow-hidden relative bg-slate-50">
+        {article.imageUrl ? (
+          <img
+            src={article.imageUrl}
+            alt={article.title}
+            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
+              (target.nextElementSibling as HTMLElement)?.classList.remove('hidden');
+            }}
+          />
+        ) : null}
+        {/* Placeholder when no image or image fails to load */}
+        <div className={`absolute inset-0 bg-gradient-to-br from-slate-100 to-teal-50/50 flex items-center justify-center transition-transform duration-700 ease-out group-hover:scale-105 ${article.imageUrl ? 'hidden' : ''}`}>
+          <Newspaper size={44} className="text-teal-200" />
+        </div>
       </div>
 
-      <div className="p-5 flex flex-col gap-3 flex-1 relative">
-        <div className="flex justify-between items-start gap-3">
-          <h3 className="text-base font-bold text-slate-800 leading-tight flex-1">
+      <div className="p-6 flex flex-col gap-4 flex-1 relative">
+        <div className="flex justify-between items-start gap-4">
+          <h3 className="text-lg font-bold text-slate-800 leading-tight flex-1 group-hover:text-teal-800 transition-colors duration-300 line-clamp-2">
             {article.title}
           </h3>
           <span
-            className={`shrink-0 px-3 py-1 text-xs font-bold rounded-full ${
+            className={`shrink-0 px-3 py-1.5 text-xs font-bold rounded-xl shadow-sm border ${
               isTrusted
-                ? 'bg-emerald-100 text-emerald-700'
-                : 'bg-rose-100 text-rose-700'
+                ? 'bg-emerald-50 text-emerald-600 border-emerald-100/60'
+                : 'bg-rose-50 text-rose-600 border-rose-100/60'
             }`}
           >
-            {article.trustScore}
+            {article.trustScore} Puan
           </span>
         </div>
 
@@ -46,8 +48,11 @@ export function NewsCard({ article }: { article: Article }) {
         </p>
 
         {expanded && (
-          <div className="mt-2 p-4 bg-slate-50 rounded-lg border border-slate-200">
-            <p className="text-xs font-semibold text-teal-700 uppercase mb-2">Orijinal Haber</p>
+          <div className="mt-2 p-5 bg-slate-50/80 rounded-xl border border-slate-100/60">
+            <p className="text-xs font-bold text-teal-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Newspaper size={14} />
+              Orijinal Haber
+            </p>
             <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
               {article.originalContent}
             </p>
@@ -56,28 +61,30 @@ export function NewsCard({ article }: { article: Article }) {
                 href={article.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 mt-3 text-xs text-teal-600 hover:text-teal-800 font-medium transition-colors"
+                className="inline-flex items-center gap-1.5 mt-4 text-xs font-bold text-teal-700 hover:text-white bg-teal-50 hover:bg-teal-600 px-4 py-2.5 rounded-lg transition-all duration-300 shadow-sm"
               >
-                <ExternalLink size={14} />
-                Kaynağa Git
+                Kaynağa Git <ExternalLink size={14} />
               </a>
             )}
           </div>
         )}
 
         <button
-          onClick={() => setExpanded(!expanded)}
-          className="mt-auto flex items-center justify-center gap-1.5 w-full py-2 text-sm font-medium text-teal-700 bg-teal-50 hover:bg-teal-100 rounded-lg transition-colors cursor-pointer"
+          onClick={(e) => {
+            e.stopPropagation();
+            setExpanded(!expanded);
+          }}
+          className="mt-auto pt-4 flex items-center justify-center gap-1.5 w-full text-sm font-semibold text-slate-400 group-hover:text-teal-600 transition-colors"
         >
           {expanded ? (
             <>
               <ChevronUp size={16} />
-              Kapat
+              Daralt
             </>
           ) : (
             <>
               <ChevronDown size={16} />
-              Haberin Tamamı
+              İncele
             </>
           )}
         </button>

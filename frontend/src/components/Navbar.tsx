@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export function Navbar() {
   return (
     <nav className="w-full bg-teal-900 text-white shadow-lg">
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
+      <div className="max-w-[1600px] w-full mx-auto px-6 xl:px-12 flex items-center justify-between h-16">
         <Link to="/" className="text-xl font-bold tracking-tight hover:text-teal-300 transition-colors">
           News Analyzer
         </Link>

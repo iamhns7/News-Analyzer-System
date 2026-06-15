@@ -4,7 +4,7 @@ import { NewsCard } from '../components/NewsCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Article, Stat } from '../types';
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 24;
 
 export function Dashboard() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -78,7 +78,7 @@ export function Dashboard() {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-8">
+    <div className="p-8 max-w-[1600px] w-full mx-auto space-y-8">
       <header>
             <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Ana Panel</h1>
             <p className="text-slate-500 mt-1">Haber analizleri ve genel sistem istatistikleri.</p>
@@ -101,12 +101,32 @@ export function Dashboard() {
             </div>
 
             {loading ? (
-              <div className="text-slate-500 flex items-center justify-center py-10">Veriler yükleniyor...</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div key={i} className="bg-white rounded-lg shadow-sm border border-slate-100 flex flex-col overflow-hidden animate-pulse">
+                    <div className="w-full h-44 bg-slate-200"></div>
+                    <div className="p-5 flex flex-col gap-3 flex-1">
+                      <div className="flex justify-between items-start gap-3">
+                        <div className="h-4 bg-slate-200 rounded w-3/4"></div>
+                        <div className="h-6 bg-slate-200 rounded-full w-12"></div>
+                      </div>
+                      <div className="space-y-2 mt-4">
+                        <div className="h-3 bg-slate-200 rounded w-full"></div>
+                        <div className="h-3 bg-slate-200 rounded w-full"></div>
+                        <div className="h-3 bg-slate-200 rounded w-4/5"></div>
+                      </div>
+                      <div className="mt-auto pt-4">
+                        <div className="h-9 bg-slate-200 rounded-lg w-full"></div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : articles.length === 0 ? (
               <div className="text-slate-500 flex items-center justify-center py-10">Henüz haber yok.</div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {paginatedArticles.map((article) => (
                     <NewsCard key={article.id} article={article} />
                   ))}
@@ -117,14 +137,14 @@ export function Dashboard() {
                     <button
                       onClick={() => goToPage(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-teal-50 hover:border-teal-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-teal-50 hover:border-teal-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
                     >
                       <ChevronLeft size={18} />
                     </button>
 
                     {getPageNumbers()[0] > 1 && (
                       <>
-                        <button onClick={() => goToPage(1)} className="w-10 h-10 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-600 hover:bg-teal-50 hover:border-teal-300 transition-colors">1</button>
+                        <button onClick={() => goToPage(1)} className="w-10 h-10 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-600 hover:bg-teal-50 hover:border-teal-300 transition-colors cursor-pointer">1</button>
                         {getPageNumbers()[0] > 2 && <span className="text-slate-400 px-1">...</span>}
                       </>
                     )}
@@ -135,8 +155,8 @@ export function Dashboard() {
                         onClick={() => goToPage(page)}
                         className={`w-10 h-10 rounded-lg text-sm font-bold transition-colors ${
                           page === currentPage
-                            ? 'bg-teal-600 text-white border border-teal-600 shadow-md'
-                            : 'border border-slate-200 bg-white text-slate-600 hover:bg-teal-50 hover:border-teal-300'
+                            ? 'bg-teal-600 text-white border border-teal-600 shadow-md cursor-default'
+                            : 'border border-slate-200 bg-white text-slate-600 hover:bg-teal-50 hover:border-teal-300 cursor-pointer'
                         }`}
                       >
                         {page}
@@ -146,14 +166,14 @@ export function Dashboard() {
                     {getPageNumbers()[getPageNumbers().length - 1] < totalPages && (
                       <>
                         {getPageNumbers()[getPageNumbers().length - 1] < totalPages - 1 && <span className="text-slate-400 px-1">...</span>}
-                        <button onClick={() => goToPage(totalPages)} className="w-10 h-10 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-600 hover:bg-teal-50 hover:border-teal-300 transition-colors">{totalPages}</button>
+                        <button onClick={() => goToPage(totalPages)} className="w-10 h-10 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-600 hover:bg-teal-50 hover:border-teal-300 transition-colors cursor-pointer">{totalPages}</button>
                       </>
                     )}
 
                     <button
                       onClick={() => goToPage(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-teal-50 hover:border-teal-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-teal-50 hover:border-teal-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
                     >
                       <ChevronRight size={18} />
                     </button>

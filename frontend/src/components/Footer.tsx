@@ -3,7 +3,7 @@ import { ExternalLink, Heart } from 'lucide-react';
 export function Footer() {
   return (
     <footer className="w-full bg-teal-900 text-teal-300 mt-auto">
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <div className="max-w-[1600px] w-full mx-auto px-6 xl:px-12 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-lg font-bold text-white mb-2">News Analyzer</h3>
