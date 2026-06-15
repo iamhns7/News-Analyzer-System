@@ -19,7 +19,6 @@ app.use('/api/news', newsRoutes);
 app.get('/api/articles', async (req, res) => {
     try {
         const articles = await prisma.article.findMany({
-            take: 20,
             where: {
                 analysis: {
                     isNot: null

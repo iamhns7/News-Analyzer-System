@@ -83,9 +83,9 @@ export function Dashboard() {
 
   return (
     <div className="p-8 max-w-[1600px] w-full mx-auto space-y-8">
-      <header>
-            <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Ana Panel</h1>
-            <p className="text-slate-500 mt-1">Haber analizleri ve genel sistem istatistikleri.</p>
+      <header className="mb-2">
+            <h1 className="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-teal-600 to-emerald-500 bg-clip-text text-transparent inline-block pb-1">Ana Panel</h1>
+            <p className="text-slate-500 mt-2 font-medium">Haber analizleri ve genel sistem istatistikleri.</p>
           </header>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -141,14 +141,14 @@ export function Dashboard() {
                     <button
                       onClick={() => goToPage(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-teal-50 hover:border-teal-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                      className="p-2.5 rounded-full border border-slate-200/80 bg-white text-slate-600 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-200 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-sm"
                     >
                       <ChevronLeft size={18} />
                     </button>
 
                     {getPageNumbers()[0] > 1 && (
                       <>
-                        <button onClick={() => goToPage(1)} className="w-10 h-10 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-600 hover:bg-teal-50 hover:border-teal-300 transition-colors cursor-pointer">1</button>
+                        <button onClick={() => goToPage(1)} className="w-10 h-10 rounded-full border border-slate-200/80 bg-white text-sm font-bold text-slate-600 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-200 hover:shadow-sm transition-all cursor-pointer shadow-sm">1</button>
                         {getPageNumbers()[0] > 2 && <span className="text-slate-400 px-1">...</span>}
                       </>
                     )}
@@ -157,10 +157,10 @@ export function Dashboard() {
                       <button
                         key={page}
                         onClick={() => goToPage(page)}
-                        className={`w-10 h-10 rounded-lg text-sm font-bold transition-colors ${
+                        className={`w-10 h-10 rounded-full text-sm font-bold transition-all duration-300 ${
                           page === currentPage
-                            ? 'bg-teal-600 text-white border border-teal-600 shadow-md cursor-default'
-                            : 'border border-slate-200 bg-white text-slate-600 hover:bg-teal-50 hover:border-teal-300 cursor-pointer'
+                            ? 'bg-gradient-to-br from-teal-500 to-teal-600 text-white shadow-md shadow-teal-500/20 cursor-default scale-105'
+                            : 'border border-slate-200/80 bg-white text-slate-600 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-200 hover:shadow-sm cursor-pointer shadow-sm'
                         }`}
                       >
                         {page}
@@ -170,14 +170,14 @@ export function Dashboard() {
                     {getPageNumbers()[getPageNumbers().length - 1] < totalPages && (
                       <>
                         {getPageNumbers()[getPageNumbers().length - 1] < totalPages - 1 && <span className="text-slate-400 px-1">...</span>}
-                        <button onClick={() => goToPage(totalPages)} className="w-10 h-10 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-600 hover:bg-teal-50 hover:border-teal-300 transition-colors cursor-pointer">{totalPages}</button>
+                        <button onClick={() => goToPage(totalPages)} className="w-10 h-10 rounded-full border border-slate-200/80 bg-white text-sm font-bold text-slate-600 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-200 hover:shadow-sm transition-all cursor-pointer shadow-sm">{totalPages}</button>
                       </>
                     )}
 
                     <button
                       onClick={() => goToPage(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-teal-50 hover:border-teal-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                      className="p-2.5 rounded-full border border-slate-200/80 bg-white text-slate-600 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-200 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-sm"
                     >
                       <ChevronRight size={18} />
                     </button>

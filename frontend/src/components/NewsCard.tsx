@@ -43,7 +43,7 @@ export function NewsCard({ article }: { article: Article }) {
           ) : null}
           {/* Placeholder when no image or image fails to load */}
           <div className={`absolute inset-0 bg-gradient-to-br from-slate-100 to-teal-50/50 flex items-center justify-center transition-transform duration-700 ease-out group-hover:scale-105 ${article.imageUrl ? 'hidden' : ''}`}>
-            <Newspaper size={44} className="text-teal-200" />
+            <Newspaper size={44} className="text-teal-200/70 animate-pulse" />
           </div>
         </div>
 
@@ -72,7 +72,7 @@ export function NewsCard({ article }: { article: Article }) {
 
           <button
             onClick={handleOpen}
-            className="mt-auto pt-4 flex items-center justify-center gap-1.5 w-full text-sm font-semibold text-slate-400 group-hover:text-teal-600 transition-colors cursor-pointer"
+            className="mt-auto pt-4 flex items-center justify-center gap-1.5 w-full text-sm font-bold text-slate-400 group-hover:text-teal-600 transition-all duration-300 cursor-pointer bg-gradient-to-t from-white via-white to-transparent"
           >
             <ExternalLink size={16} />
             İncele
@@ -82,11 +82,11 @@ export function NewsCard({ article }: { article: Article }) {
 
       {expanded && createPortal(
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-sm transition-opacity" 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/40 backdrop-blur-md transition-all duration-300" 
           onClick={handleClose}
         >
           <div 
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+            className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-teal-900/20 border border-white/50 w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 slide-in-from-bottom-4 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between p-6 border-b border-slate-100">
@@ -144,7 +144,7 @@ export function NewsCard({ article }: { article: Article }) {
                         href={article.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-sm font-bold text-teal-700 hover:text-white bg-teal-50 hover:bg-teal-600 px-4 py-1.5 rounded-lg transition-all duration-300 shadow-sm"
+                        className="inline-flex items-center gap-1.5 text-sm font-bold text-white bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 px-5 py-2 rounded-xl transition-all duration-300 shadow-md shadow-teal-500/20 hover:shadow-lg hover:shadow-teal-500/40 hover:-translate-y-0.5"
                       >
                         Kaynağa Git <ExternalLink size={16} />
                       </a>
