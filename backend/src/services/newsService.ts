@@ -30,7 +30,51 @@ class NewsService {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (compatible; NewsAnalyzer/1.0)',
             },
+            customFields: {
+                item: [
+                    ['media:content', 'mediaContent', { keepArray: false }],
+                    ['media:thumbnail', 'mediaThumbnail', { keepArray: false }],
+                ],
+            },
         });
+    }
+
+    /**
+     * RSS item'ından görsel URL'si çıkarır.
+     * Sırasıyla: enclosure → media:content → media:thumbnail → content içindeki <img> → og:image (scraping)
+     */
+    private async extractImageUrl(item: any): Promise<string | null> {
+        // 1. enclosure
+        if (item.enclosure?.url) return item.enclosure.url;
+
+        // 2. media:content
+        if (item.mediaContent?.$?.url) return item.mediaContent.$.url;
+
+        // 3. media:thumbnail
+        if (item.mediaThumbnail?.$?.url) return item.mediaThumbnail.$.url;
+
+        // 4. content içindeki ilk <img> tag'i
+        const content = item['content:encoded'] || item.content || '';
+        const imgMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
+        if (imgMatch?.[1]) return imgMatch[1];
+
+        // 5. Son çare: Haber sayfasından og:image meta tag'ini çek
+        if (item.link) {
+            try {
+                const response = await axios.get(item.link, {
+                    timeout: 5000,
+                    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; NewsAnalyzer/1.0)' },
+                });
+                const html: string = response.data;
+                const ogMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
+                    || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+                if (ogMatch?.[1]) return ogMatch[1];
+            } catch {
+                // Scraping başarısız – sessizce geç
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -53,6 +97,11 @@ class NewsService {
 
         for (const item of articles) {
             if (!item.title || !item.url || item.title === '[Removed]') continue;
+
+            // Görselsiz haberleri atla
+            if (!item.urlToImage) {
+                continue;
+            }
 
             const sourceName = item.source?.name || 'Bilinmeyen Kaynak';
 
@@ -119,14 +168,21 @@ class NewsService {
                     // Upsert: url eşleşirse güncelle, yoksa oluştur
                     const existing = await prisma.article.findUnique({ where: { url: item.link } });
 
+                    const rssImageUrl = await this.extractImageUrl(item);
+
+                    // Görselsiz haberleri atla
+                    if (!rssImageUrl) {
+                        continue;
+                    }
+
                     await prisma.article.upsert({
                         where: { url: item.link },
-                        update: { imageUrl: (item as any).enclosure?.url || undefined }, // imageUrl'i güncelle
+                        update: { imageUrl: rssImageUrl || undefined },
                         create: {
                             title: item.title,
                             originalContent: item.contentSnippet || item.content || item.summary || 'İçerik yok',
                             url: item.link,
-                            imageUrl: (item as any).enclosure?.url || null,
+                            imageUrl: rssImageUrl,
                             publishedAt: item.pubDate ? new Date(item.pubDate) : new Date(),
                             sourceId: sourceRecord.id,
                             sourceType: 'RSS',

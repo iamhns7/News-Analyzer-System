@@ -5,14 +5,14 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Article, Stat } from '../types';
 import { fetchArticles } from '../services/api';
 
-const ITEMS_PER_PAGE = 24;
+const ITEMS_PER_PAGE = 16;
 
 export function Dashboard() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [stats, setStats] = useState<Stat[]>([
-    { label: 'Toplam Analiz', value: 0, iconName: 'BarChart3' },
-    { label: 'Güvenilirlik', value: '%0', iconName: 'ShieldCheck' },
-    { label: 'Dezenformasyon', value: 0, iconName: 'AlertTriangle' },
+    { label: 'İncelenen Haberler', value: 0, iconName: 'BarChart3' },
+    { label: 'Genel Güvenilirlik', value: '%0', iconName: 'ShieldCheck' },
+    { label: 'Yanıltıcı İçerik', value: 0, iconName: 'AlertTriangle' },
   ]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,9 +48,9 @@ export function Dashboard() {
           : 0;
 
         setStats([
-          { label: 'Toplam Analiz', value: total, iconName: 'BarChart3' },
-          { label: 'Güvenilirlik', value: `%${avgTrust}`, iconName: 'ShieldCheck' },
-          { label: 'Dezenformasyon', value: fakeCount, iconName: 'AlertTriangle' },
+          { label: 'İncelenen Haberler', value: total, iconName: 'BarChart3' },
+          { label: 'Genel Güvenilirlik', value: `%${avgTrust}`, iconName: 'ShieldCheck' },
+          { label: 'Yanıltıcı İçerik', value: fakeCount, iconName: 'AlertTriangle' },
         ]);
       } catch (error) {
         console.error("Haberleri çekerken hata:", error);
@@ -83,10 +83,10 @@ export function Dashboard() {
 
   return (
     <div className="p-8 max-w-[1600px] w-full mx-auto space-y-8">
-      <header className="mb-2">
-            <h1 className="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-teal-600 to-emerald-500 bg-clip-text text-transparent inline-block pb-1">Ana Panel</h1>
-            <p className="text-slate-500 mt-2 font-medium">Haber analizleri ve genel sistem istatistikleri.</p>
-          </header>
+      <header className="mb-6 p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-2">
+            <h1 className="text-3xl font-bold tracking-tight text-slate-800">Sistem Özeti</h1>
+            <p className="text-slate-500 font-medium">Platformumuzdaki en güncel haber analizlerini ve istatistikleri sizin için özenle derledik.</p>
+      </header>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {stats.map((stat, i) => (

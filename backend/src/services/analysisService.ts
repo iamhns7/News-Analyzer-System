@@ -60,6 +60,9 @@ Haber İçeriği: ${article.originalContent}`;
           usedEngine = 'Gemini 2.5 Flash';
           console.log(`[Article ID: ${article.id}] Gemini başarılı.`);
         } catch (geminiErr: any) {
+          const errorCode = geminiErr?.status || 'Bilinmiyor';
+          const errorReason = geminiErr?.statusText || geminiErr?.message || 'Detay yok';
+
           const is429 =
             geminiErr?.status === 429 ||
             geminiErr?.message?.includes('429');
@@ -68,13 +71,12 @@ Haber İçeriği: ${article.originalContent}`;
             // Kalıcı kota hatası – şalteri indir
             isGeminiExhausted = true;
             console.error(
-              `[Article ID: ${article.id}] Kalıcı kota hatası (429) alındı. Şalter indirildi, kalan tüm makaleler doğrudan Groq'a gidecek.`
+              `[Article ID: ${article.id}] ❌ Gemini ATILDI → Hata: ${errorCode} - ${errorReason} | Şalter indirildi, kalan tüm makaleler doğrudan Groq'a gidecek.`
             );
           } else {
             // Geçici sunucu hatası (503 vb.) – şalteri İNDİRME
             console.warn(
-              `[Article ID: ${article.id}] Geçici sunucu hatası alındı. Sadece bu makale için Groq'a geçiliyor, sonrakilerde Gemini tekrar denenecek.`,
-              geminiErr
+              `[Article ID: ${article.id}] ⚠️ Gemini ATILDI → Hata: ${errorCode} - ${errorReason} | Sadece bu makale için Groq'a geçiliyor, sonrakilerde Gemini tekrar denenecek.`
             );
           }
         }
