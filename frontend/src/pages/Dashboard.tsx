@@ -34,7 +34,7 @@ export function Dashboard() {
           },
           analysis: {
             aiSummary: item.analysis?.aiSummary || "Analiz yok",
-            trustScore: item.source?.trustScore || 0,
+            trustScore: item.analysis?.trustScore || 0,
             isFake: item.analysis?.isFake || false,
           }
         }));

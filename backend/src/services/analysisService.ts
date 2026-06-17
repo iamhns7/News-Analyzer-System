@@ -59,9 +59,24 @@ Haber İçeriği: ${article.originalContent}`;
           analysisData = JSON.parse(responseText);
           usedEngine = 'Gemini 2.5 Flash';
           console.log(`[Article ID: ${article.id}] Gemini başarılı.`);
-        } catch (geminiErr) {
-          console.error(`[Article ID: ${article.id}] Gemini hatası! Circuit Breaker devreye girdi, kalan makaleler doğrudan Groq'a yönlendirilecek.`, geminiErr);
-          isGeminiExhausted = true; // Şalteri indir
+        } catch (geminiErr: any) {
+          const is429 =
+            geminiErr?.status === 429 ||
+            geminiErr?.message?.includes('429');
+
+          if (is429) {
+            // Kalıcı kota hatası – şalteri indir
+            isGeminiExhausted = true;
+            console.error(
+              `[Article ID: ${article.id}] Kalıcı kota hatası (429) alındı. Şalter indirildi, kalan tüm makaleler doğrudan Groq'a gidecek.`
+            );
+          } else {
+            // Geçici sunucu hatası (503 vb.) – şalteri İNDİRME
+            console.warn(
+              `[Article ID: ${article.id}] Geçici sunucu hatası alındı. Sadece bu makale için Groq'a geçiliyor, sonrakilerde Gemini tekrar denenecek.`,
+              geminiErr
+            );
+          }
         }
       } else {
         console.log(`[Article ID: ${article.id}] Circuit Breaker aktif – Gemini atlanıyor, doğrudan Groq kullanılacak.`);
@@ -112,6 +127,7 @@ Haber İçeriği: ${article.originalContent}`;
         data: {
           articleId: article.id,
           aiSummary: analysisData.summary || 'Özet alınamadı.',
+          trustScore: typeof analysisData.trustScore === 'number' ? analysisData.trustScore : 0,
           isFake: typeof analysisData.trustScore === 'number' ? analysisData.trustScore < 50 : false,
           fakeNewsReason: (typeof analysisData.trustScore === 'number' && analysisData.trustScore < 50)
             ? 'Yapay zeka tarafından düşük güvenilirlik puanı tespit edildi.'
