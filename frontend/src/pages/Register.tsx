@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
 
-export function Login() {
+export function Register() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -17,16 +18,16 @@ export function Login() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/auth/login', {
+      const response = await fetch('http://localhost:3000/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Giriş başarısız.');
+        throw new Error(data.error || 'Kayıt başarısız.');
       }
 
       login(data.token, data.user);
@@ -43,10 +44,10 @@ export function Login() {
       <div className="max-w-md w-full space-y-8 bg-white/80 backdrop-blur-xl p-10 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
         <div>
           <h2 className="mt-2 text-center text-3xl font-extrabold text-slate-800 tracking-tight">
-            Hesabınıza Giriş Yapın
+            Aramıza Katılın
           </h2>
           <p className="mt-3 text-center text-sm text-slate-500">
-            Haber analizlerine erişmek için giriş yapın
+            Haber analizlerine ve günlük bültenlere erişmek için hesap oluşturun
           </p>
         </div>
 
@@ -59,6 +60,24 @@ export function Login() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5" htmlFor="name">Ad Soyad</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-slate-400" />
+                </div>
+                <input
+                  id="name"
+                  type="text"
+                  required
+                  className="appearance-none block w-full pl-10 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all sm:text-sm"
+                  placeholder="Adınız Soyadınız"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+            </div>
+
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-1.5" htmlFor="email">E-posta</label>
               <div className="relative">
@@ -87,8 +106,9 @@ export function Login() {
                   id="password"
                   type="password"
                   required
+                  minLength={6}
                   className="appearance-none block w-full pl-10 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all sm:text-sm"
-                  placeholder="••••••••"
+                  placeholder="En az 6 karakter"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -105,16 +125,16 @@ export function Login() {
               <Loader2 className="animate-spin h-5 w-5" />
             ) : (
               <span className="flex items-center gap-2">
-                Giriş Yap <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                Kayıt Ol <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </span>
             )}
           </button>
         </form>
 
         <p className="text-center text-sm text-slate-500 mt-6">
-          Hesabınız yok mu?{' '}
-          <Link to="/register" className="font-bold text-teal-600 hover:text-teal-500 transition-colors">
-            Hemen Kaydolun
+          Zaten hesabınız var mı?{' '}
+          <Link to="/login" className="font-bold text-teal-600 hover:text-teal-500 transition-colors">
+            Giriş Yapın
           </Link>
         </p>
       </div>

@@ -108,8 +108,13 @@ Haber İçeriği: ${article.originalContent}`;
           console.error(`[Article ID: ${article.id}] Groq da başarısız oldu:`, groqErr);
 
           // Her iki API de başarısız – hata kaydı oluştur
-          await prisma.analysis.create({
-            data: {
+          await prisma.analysis.upsert({
+            where: { articleId: article.id },
+            update: {
+              aiSummary: 'Her iki API de hata verdi. Analiz tamamlanamadı.',
+              isFake: false,
+            },
+            create: {
               articleId: article.id,
               aiSummary: 'Her iki API de hata verdi. Analiz tamamlanamadı.',
               isFake: false,
@@ -125,8 +130,17 @@ Haber İçeriği: ${article.originalContent}`;
       }
 
       // Başarılı analiz sonucunu veritabanına kaydet
-      await prisma.analysis.create({
-        data: {
+      await prisma.analysis.upsert({
+        where: { articleId: article.id },
+        update: {
+          aiSummary: analysisData.summary || 'Özet alınamadı.',
+          trustScore: typeof analysisData.trustScore === 'number' ? analysisData.trustScore : 0,
+          isFake: typeof analysisData.trustScore === 'number' ? analysisData.trustScore < 50 : false,
+          fakeNewsReason: (typeof analysisData.trustScore === 'number' && analysisData.trustScore < 50)
+            ? 'Yapay zeka tarafından düşük güvenilirlik puanı tespit edildi.'
+            : null,
+        },
+        create: {
           articleId: article.id,
           aiSummary: analysisData.summary || 'Özet alınamadı.',
           trustScore: typeof analysisData.trustScore === 'number' ? analysisData.trustScore : 0,
