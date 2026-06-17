@@ -1,73 +1,48 @@
-# React + TypeScript + Vite
+# 🎨 News Analyzer - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Bu klasör, **News Analyzer System** (Haber Analiz Sistemi) bitirme projesinin istemci (client) tarafını barındırır. Modern ve şık bir arayüz ile kullanıcılara haberleri, AI analizlerini ve kişiselleştirilmiş bildirimleri sunar.
 
-Currently, two official plugins are available:
+## 💻 Teknolojiler ve Araçlar
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Bu projede kullanıcı deneyimini en üst düzeye çıkarmak için aşağıdaki güncel teknolojiler tercih edilmiştir:
 
-## React Compiler
+- **React (v19)**: Kullanıcı arayüzünü oluşturmak için kullanılan popüler JavaScript kütüphanesi.
+- **Vite**: Ultra hızlı geliştirme ortamı ve modern derleyici.
+- **TypeScript**: Hata riskini en aza indiren, güvenli kod yazımını sağlayan dil.
+- **Tailwind CSS (v4)**: Özel stilleri hızlı ve tutarlı bir şekilde uygulamak için utility-first CSS framework'ü.
+- **React Router DOM**: Sayfalar (Dashboard, Login vb.) arasında kesintisiz ve hızlı geçişler için.
+- **Lucide React**: Modern, temiz ve duyarlı (responsive) SVG ikon seti.
+- **Axios**: Backend servisleriyle (API) iletişim kurmak için HTTP istemcisi.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Kurulum ve Çalıştırma
 
-## Expanding the ESLint configuration
+Projeyi yerel bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyin:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Bağımlılıkları Yükleyin
+Klasör dizinindeyken gerekli kütüphaneleri indirin:
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2. Ortam Değişkenleri (Gerekirse)
+Eğer backend sunucunuz farklı bir portta çalışıyorsa veya özel API anahtarları gerekiyorsa ana dizine bir `.env` dosyası oluşturun:
+```env
+VITE_API_URL=http://localhost:5000/api
 ```
+
+### 3. Geliştirme Sunucusunu Başlatın
+Aşağıdaki komut ile Vite geliştirme sunucusunu başlatın:
+```bash
+npm run dev
+```
+
+Uygulama başarıyla başlatıldığında terminalde beliren adrese (genellikle `http://localhost:5173`) tarayıcınızdan giderek projeyi görüntüleyebilirsiniz.
+
+## 📂 Dizin Yapısı
+
+- `src/components/`: Tekrar kullanılabilir UI bileşenleri (Navbar, Footer, NewsCard vb.).
+- `src/pages/`: Uygulamanın ana sayfaları (Dashboard, Login vb.).
+- `src/assets/`: Görseller, ikonlar veya statik dosyalar.
+
+---
+*Projenin ana yapısı ve backend detayları için ana dizindeki veya backend klasöründeki README dosyalarını inceleyebilirsiniz.*
